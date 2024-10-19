@@ -1,6 +1,5 @@
 package ie.atu.week5.customerapp;
 
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
