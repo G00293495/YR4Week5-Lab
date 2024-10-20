@@ -25,7 +25,6 @@ public class CustomerOrderController {
     @PostMapping("/customer-with-orders")
     public ResponseEntity<String> createCustomerWithOrders(@RequestBody CustomerOrderRequest customerOrderRequest) {
 
-        customerOrderService.newCustomerNewOrder(customerOrderRequest);
 
 
         return ResponseEntity.ok("Customer and orders created successfully");
