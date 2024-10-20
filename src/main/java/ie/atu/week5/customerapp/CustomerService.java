@@ -1,7 +1,6 @@
 package ie.atu.week5.customerapp;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,34 +9,38 @@ import java.util.Optional;
 @Service
 public class CustomerService {
     private final CustomerRepository customerRepository;
-    private Customer customer;
+
+
     @Autowired
     public CustomerService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
-        this.customer = customer;
     }
-    public List<Customer> getAll(){
+
+    public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }
-
-    public ResponseEntity<Customer> getCustomerById(String id){
-        Optional<Customer> customer = customerRepository.findById(id);
-        if (customer.isPresent()) {
-            return ResponseEntity.ok(customer.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public Optional<Customer> getAllCustomerById(String id) {
+        return customerRepository.findById(id);
     }
-
-    public Customer create(Customer customer){
+    public Customer createCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
-
-    public ResponseEntity<Void> delete(String id){
+    public Customer updateCustomer(String id, Customer customer) {
+        Optional<Customer> customerOptional = customerRepository.findById(id);
+        if (!customerOptional.isPresent()) {
+            throw new RuntimeException("Customer not found");
+        }
+        Customer existingCustomer = customerOptional.get();
+        existingCustomer.setName(customer.getName());
+        existingCustomer.setEmail(customer.getEmail());
+        return customerRepository.save(existingCustomer);
+    }
+    public boolean deleteCustomer(String id) {
         if (customerRepository.existsById(id)) {
             customerRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
+            return true;
         }
-        return ResponseEntity.notFound().build();
+        return false;
     }
+
 }
